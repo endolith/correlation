@@ -34,18 +34,6 @@ def normalizeArray(a):
             new_a[x,y] = float(a[x,y])/maxval
     return new_a
 
-def pil2array(im):
-    ''' Convert a 1-channel grayscale PIL image to a numpy ndarray '''
-    data = list(im.getdata())
-    w,h = im.size
-    A = numpy.zeros((w*h), 'd')
-    i=0
-    for val in data:
-        A[i] = val
-        i=i+1
-    A=A.reshape(w,h)
-    return A
-
 def array2pil(A,mode='L'):
     ''' Convert a numpy ndarray to a PIL image.
         Only grayscale images (PIL mode 'L') are supported.
@@ -137,9 +125,9 @@ def main(f1, f2):
     f = numpy.asarray(im1) # was f = pil2array(im1)
     w = numpy.asarray(im2) # was w = pil2array(im2)
     corr = correlation(f,w) # was c = array2pil(correlation(f,w))
-    c = Image.fromarray(numpy.uint8(normalizeArray(corr) * 255))
+    c = Image.fromarray(numpy.uint8(normalizeArray(corr) * 255)) # does this actually work?
     #c.show()
-    filename = 'CORRELATION.png'
+    filename = 'correlation.png'
     print "Saving as:", filename
     c.save(filename)
 
@@ -147,4 +135,4 @@ if __name__ == "__main__":
     if len(sys.argv) == 3:
         main(sys.argv[1], sys.argv[2])
     else:
-        print 'USAGE: correlation <image file> <match file>'
+        print 'USAGE: ./correlation <image file> <match file>'
