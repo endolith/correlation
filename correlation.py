@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 '''
 correlation.py
 Compute the correlation between two, single-channel, grayscale input images.
@@ -15,7 +17,7 @@ import Image
 import numpy
 import math
 import sys
-import timer # my timer code
+import time
 
 def normalizeArray(a):
     ''' I normalize the given array to values between 0 and 1.
@@ -76,9 +78,8 @@ def correlation(input, match):
     iw, ih = input.shape # get input image width and height
     mw, mh = match.shape # get match image width and height
     
-    print "Computing Correleation Coefficients..."
-    t = timer.Timer()
-    t.start()
+    print "Computing correlation coefficients..."
+    start_time = time.time()
 
     for i in range(0, iw):
         for j in range(0, ih):
@@ -121,8 +122,8 @@ def correlation(input, match):
             
             c[i,j] = temp
             
-    t.stop()
-    print "=> Correlation computed in: ", t.diff()
+    end_time = time.time()
+    print '=> Correlation computed in: %.3f seconds' % (end_time - start_time)
     print '\tMax: ', c.max()
     print '\tMin: ', c.min()
     print '\tMean: ', c.mean()
@@ -138,12 +139,12 @@ def main(f1, f2):
     corr = correlation(f,w) # was c = array2pil(correlation(f,w))
     c = Image.fromarray(numpy.uint8(normalizeArray(corr) * 255))
     #c.show()
-    print "Saving as: CORRELATION.jpg"
-    c.save("CORRELATION.jpg")
+    filename = 'CORRELATION.png'
+    print "Saving as:", filename
+    c.save(filename)
 
 if __name__ == "__main__":
     if len(sys.argv) == 3:
         main(sys.argv[1], sys.argv[2])
     else:
-        print 'USAGE: python correlation <image file> <match file>'
-
+        print 'USAGE: correlation <image file> <match file>'
